@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0c0e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kick Range">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<style>body{padding-top:calc(20px + env(safe-area-inset-top));padding-bottom:calc(64px + env(safe-area-inset-bottom))}</style>
+</head>
+<body>
+<title>Kick Range</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600&display=swap">
+<style>
+:root{
+  /* committed single-theme dark: near-black, Plex mono/sans, one semantic green and one warm tone */
+  --bg:#0b0c0e; --panel:#14161a; --panel2:#101216; --line:#262a30; --line2:#363b43;
+  --ink:#c6c9cf; --dim:#82868f; --bright:#e8eaed; --faint:#4a4e56;
+  --ok:#6f8f74; --warn:#b06a5f;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --sans:"IBM Plex Sans",-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box;border-radius:0!important}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;
+  padding:20px 14px 64px;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:580px;margin:0 auto}
+:focus-visible{outline:1px solid var(--dim);outline-offset:2px}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+.mono{font-family:var(--mono)}
+h1{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--bright);margin:0}
+.head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.date{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.week{margin-top:10px;border:1px solid var(--line2);background:var(--panel);padding:10px 12px}
+.week .k{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--bright)}
+.week .r{font-size:13px;color:var(--dim);margin-top:3px}
+.week .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.lnk{font-family:var(--mono);font-size:11px;color:var(--dim);text-decoration:underline;text-underline-offset:2px}
+.lnk.arm{color:var(--warn)}
+.startbtn{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--ok);color:var(--bright);padding:8px 12px;margin-top:8px}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);margin:14px 0 4px;border:1px solid var(--line2)}
+.tabs button{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);padding:11px 4px}
+.tabs button+button{border-left:1px solid var(--line2)}
+.tabs button[aria-selected=true]{background:var(--panel);color:var(--bright)}
+.sync{font-family:var(--mono);font-size:10.5px;color:var(--faint);margin:6px 0 0;text-align:right}
+.note{font-size:13px;color:var(--dim);margin:14px 0 2px}
+.bar{height:3px;background:#1b1e23;border:1px solid var(--line2);margin:10px 0 0}
+.bar i{display:block;height:100%;background:var(--ok);transition:width .2s}
+h2{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);
+  margin:26px 0 0;padding-bottom:7px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:8px}
+h2 .c{color:var(--faint);letter-spacing:.06em}
+h2 .c.all{color:var(--ok)}
+.ex{display:grid;grid-template-columns:40px 1fr;gap:0 10px;padding:12px 0;border-bottom:1px solid var(--line)}
+.tick{width:30px;height:30px;border:1px solid var(--line2);margin-top:1px;display:grid;place-items:center;color:var(--bg);font-size:17px;font-weight:600}
+.ex.done .tick{background:var(--ok);border-color:var(--ok)}
+.ex.done .nm{color:var(--dim);text-decoration:line-through;text-decoration-color:var(--faint)}
+.top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.nm{color:var(--bright);font-weight:600;font-size:15px;line-height:1.3}
+.dose{font-family:var(--mono);font-size:12px;color:var(--ink);white-space:nowrap;text-align:right}
+.meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.chip{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--dim);border:1px solid var(--line2);padding:1px 5px}
+.chip.ld{color:var(--bright);border-color:var(--dim)}
+details{margin-top:6px}
+summary{font-family:var(--mono);font-size:11px;color:var(--dim);cursor:pointer;list-style:none;padding:3px 0}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"+ ";color:var(--faint)}
+details[open] summary::before{content:"\2212 "}
+details p{margin:4px 0 0;font-size:13.5px;line-height:1.55;color:var(--ink)}
+details p.alt{color:var(--dim);font-size:12.5px}
+.ctl{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center}
+.load{width:120px;background:var(--panel2);color:var(--bright);border:1px solid var(--line2);font:inherit;font-family:var(--mono);font-size:13px;padding:7px 9px}
+.load::placeholder{color:var(--faint)}
+.tm{font-family:var(--mono);font-size:12px;border:1px solid var(--line2);color:var(--ink);padding:7px 10px;min-width:92px;text-align:left}
+.tm.run{border-color:var(--ok);color:var(--bright)}
+.cue{font-family:var(--mono);font-size:12px;color:var(--dim);margin-top:4px}
+.flags{margin-top:26px;border:1px solid var(--line);border-left:2px solid var(--warn);padding:2px 12px 10px;background:var(--panel2)}
+.flags summary{color:var(--warn);padding:8px 0 2px}
+.flags li{font-size:13px;margin:6px 0}
+.flags ul{margin:4px 0 0;padding-left:16px}
+/* tests */
+.tform{border:1px solid var(--line2);background:var(--panel);padding:12px;margin-top:14px}
+.trow{display:grid;grid-template-columns:1fr 70px 70px;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)}
+.trow:last-of-type{border-bottom:0}
+.trow .tn{font-size:13.5px;color:var(--bright)}
+.trow .tt{font-family:var(--mono);font-size:10.5px;color:var(--dim)}
+.trow input,.tform select,.tform input.n4{width:100%;background:var(--panel2);color:var(--bright);border:1px solid var(--line2);font:inherit;font-family:var(--mono);font-size:14px;padding:7px 8px}
+.lr{font-family:var(--mono);font-size:10px;color:var(--faint);text-align:center;letter-spacing:.1em}
+.t4{display:grid;gap:6px;margin-top:10px}
+.save{margin-top:12px;width:100%;border:1px solid var(--ok);color:var(--bright);font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:11px}
+.msg{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:8px;min-height:1em}
+.hist{width:100%;border-collapse:collapse;margin-top:12px;font-variant-numeric:tabular-nums}
+.hist th,.hist td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--line);font-size:12.5px;vertical-align:top}
+.hist th{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);font-weight:400}
+.hist td{font-family:var(--mono)}
+.pass{color:var(--ok)} .fail{color:var(--warn)}
+.rm{font-family:var(--mono);font-size:10.5px;color:var(--faint);text-decoration:underline}
+.rm.arm{color:var(--warn)}
+.empty{font-family:var(--mono);font-size:12px;color:var(--faint);padding:12px 0}
+.lim{width:100%;border-collapse:collapse;margin-top:8px}
+.lim td{font-size:13px;padding:7px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+.lim td:last-child{font-family:var(--mono);font-size:11.5px;color:var(--bright);white-space:nowrap}
+.exp{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;border:1px solid var(--line2);padding:7px 10px;font-family:var(--mono);font-size:11.5px;color:var(--dim)}
+.exp.due{border-color:var(--warn);color:var(--bright)}
+.exp button{border:1px solid var(--line2);padding:6px 10px;margin-left:6px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--bright)}
+.exp.due button[data-act=export]{border-color:var(--warn)}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+
+<script type="application/json" id="routine">
+{
+  "version": "2",
+  "updated": "2026-10-07",
+  "frequency": "Gym routine 3 times a week on non-consecutive days, about 40 minutes, after swimming or on its own - not right before a race-pace or time-trial session. Start every lift lighter than you think: two months out means tendons need a few weeks to catch up with muscle.",
+  "phases": [
+    {"weeks": [1, 2], "label": "Weeks 1-2 · learn", "rule": "Loads you could lift 3-4 more reps (RPE 6). Copenhagen on the short lever. Contract-relax 2 rounds."},
+    {"weeks": [3, 4], "label": "Weeks 3-4 · build", "rule": "Add load when every rep is smooth through the full range (RPE 7-8). Contract-relax 3 rounds. Copenhagen 25-30 s."},
+    {"weeks": [5, 6], "label": "Weeks 5-6 · strong", "rule": "Heaviest loads you own with full range (RPE 8). Copenhagen long lever. Retest at the end of week 6."},
+    {"weeks": [7, 999], "label": "Maintenance", "rule": "Twice a week once T1 is 45° or more on both sides, T2 is 10 cm or more, and the kick check is clean. Pre-pool stays every session."}
+  ],
+  "gym": [
+    {"id": "A", "title": "Prep", "minutes": "5 min", "items": [
+      {"id": "g-a1", "name": "Hip rotators on a ball", "dose": "60 s / side", "style": "Soft tissue", "load": false,
+       "how": "Sit on a lacrosse or tennis ball under one glute, that ankle crossed over the other knee. Find the tender spot, breathe, small movements. Stiff hip external rotators are what block internal rotation.",
+       "timer": [["side 1", 60], ["side 2", 60]]},
+      {"id": "g-a2", "name": "90/90 switches", "dose": "2 × 8 each way", "style": "Dynamic", "load": false,
+       "how": "Sit with both knees bent 90°, one in front, one to the side. Rotate both knees to the other side and back, chest tall. Hands behind for support, then hands free."},
+      {"id": "g-a3", "name": "Knee-to-wall rocks", "dose": "2 × 10 / side", "style": "Dynamic", "load": false,
+       "how": "Lunge facing a wall with the foot just inside your maximum distance. Rock the knee to the wall and back, heel down."}
+    ]},
+    {"id": "B", "title": "Hip internal rotation", "minutes": "12 min", "items": [
+      {"id": "g-b1", "name": "Goblet 90/90 transitions", "dose": "2 × 6 each way", "style": "Loaded mobility", "load": true,
+       "how": "Hold a kettlebell or dumbbell at the chest and switch the knees side to side without using your hands. The load makes the back hip work at end range.",
+       "alt": "No weight: arms straight out in front."},
+      {"id": "g-b2", "name": "Cable seated hip internal rotation", "dose": "3 × 10 / side", "style": "Strength in range", "load": true,
+       "how": "Sit on a bench, knee at 90°. Ankle strap on a low cable set to the inside of the working leg. Rotate the foot outward against the cable with the thigh still; take 3 s to come back. Add load only when every rep is smooth.",
+       "alt": "No cable: heavy band anchored on the inside."},
+      {"id": "g-b3", "name": "Prone hip internal rotation, ankle weight", "dose": "3 × 10 / side", "style": "Eccentric strength", "load": true,
+       "how": "Face down, knee bent 90°, 1-3 kg ankle weight. Lower the foot outward over 3 s and lift it back. Thighs together, pelvis flat on the floor.",
+       "alt": "No ankle weight: band anchored on the inside."},
+      {"id": "g-b4", "name": "90/90 contract-relax + lift-offs", "dose": "2 rounds / side", "style": "End-range isometrics", "load": false,
+       "how": "Focus on the back leg, the one rotating inward. Relax into it for 60 s; press the knee and shin into the floor at about 50% for 10 s; then try to lift the foot off the floor for 10 s. Finish with 5 lift-offs, 3 s each.",
+       "timer": [["relax", 60], ["press 50%", 10], ["lift", 10]]},
+      {"id": "g-b5", "name": "Hip airplanes", "dose": "2 × 5 / side", "style": "Loaded control", "load": true,
+       "how": "Stand on one leg with a hand on a rack and hinge until the torso is near horizontal. Rotate the pelvis open, then close it back over the standing hip - that closing is hip internal rotation under bodyweight. Slow.",
+       "alt": "Once easy, hold a 2-5 kg dumbbell in the free hand."}
+    ]},
+    {"id": "C", "title": "Adductors, glutes & knee", "minutes": "12 min", "items": [
+      {"id": "g-c1", "name": "Copenhagen plank", "dose": "3 × 20-30 s / side", "style": "Isometric strength", "load": false,
+       "how": "Side plank with the top leg on a bench - knee on the bench for the short lever, ankle for the long lever - and the bottom leg free. Hips high, body straight. The adductors drive the snap of the feet together.",
+       "alt": "If the shoulder complains on the forearm: adductor machine plus a ball squeeze instead.",
+       "timer": [["hold", 20], ["rest", 20], ["hold", 20]]},
+      {"id": "g-c2", "name": "Hip adduction, cable or machine", "dose": "3 × 10 / side", "style": "Strength", "load": true,
+       "how": "Adductor machine, or an ankle strap on a low cable from the side. Start from a wide position you own, squeeze in for 2 s, return slowly. This is the kick's in-sweep under load.",
+       "alt": "No equipment: ball or foam-roller squeeze, 3 × 30 s."},
+      {"id": "g-c3", "name": "Goblet Cossack squat", "dose": "3 × 6 / side", "style": "Loaded mobility", "load": true,
+       "how": "Wide stance, weight at the chest. Sit into one hip with the heel down and the knee tracking over the toes; the other leg straight, toes up. Strength through the range the kick uses.",
+       "alt": "Hold a rack for balance, no weight."},
+      {"id": "g-c4", "name": "Rear-foot-elevated split squat", "dose": "3 × 8 / side", "style": "Strength + knee control", "load": true,
+       "how": "Back foot on a bench, dumbbells at your sides - no bar on the back, which keeps the shoulder out of it. The knee tracks over the second toe and never caves inward."},
+      {"id": "g-c5", "name": "Hip thrust", "dose": "3 × 8", "style": "Strength", "load": true,
+       "how": "Upper back on a bench, padded barbell or a dumbbell on the hips. Drive up and squeeze for 2 s. Strong glutes control the hip so the knee does not take the load.",
+       "alt": "No bar: single-leg glute bridge, 3 × 10 / side."}
+    ]},
+    {"id": "D", "title": "Ankle hook & turnout", "minutes": "6 min", "items": [
+      {"id": "g-d1", "name": "Loaded half-kneeling dorsiflexion", "dose": "3 × 8 / side", "style": "Loaded mobility", "load": true,
+       "how": "Half-kneel with a dumbbell resting on the front knee. Rock the knee forward over the toes, heel down; hold the last rep for 10 s."},
+      {"id": "g-d2", "name": "Tibialis raises", "dose": "3 × 15", "style": "Strength", "load": true,
+       "how": "Back against a wall, heels about 30 cm out. Pull the toes and forefoot up hard, lower slowly. Progress to one leg, then a plate on the feet or a tib bar. This is the strength that holds the foot hooked.",
+       "alt": "Load field: write 'BW', '1 leg', or the plate weight."},
+      {"id": "g-d3", "name": "Eversion, band or cable", "dose": "3 × 12 / side", "style": "Strength in range", "load": true,
+       "how": "Seated, band or ankle strap around the forefoot anchored on the inside. Turn the sole outward and up; take 3 s to come back."}
+    ]},
+    {"id": "E", "title": "Power & pattern", "minutes": "5 min", "items": [
+      {"id": "g-e1", "name": "Countermovement jumps", "dose": "3 × 5", "style": "Power", "load": false,
+       "how": "Dip and jump as high as you can, land soft, full reset between reps. Jump height tracks propulsive speed in elite breaststrokers."},
+      {"id": "g-e2", "name": "Prone dry kick, band above knees", "dose": "2 × 10", "style": "Motor pattern", "load": false,
+       "how": "Face down, mini band just above the knees. Heels up fast and hidden behind the thighs, feet hook and turn out late, push back, snap together. The band keeps the knees honest."}
+    ]}
+  ],
+  "prepool": {
+    "note": "8 minutes dry, then the first ~400 m of the warm-up. Keep it moving: no static hold longer than about 20 s before training.",
+    "deck": [
+      {"id": "p-1", "name": "Easy skips or jacks", "dose": "1 min", "cue": "Warm, breathing up", "timer": [["move", 60]]},
+      {"id": "p-2", "name": "Standing hip circles (CARs), hand on a wall", "dose": "3 each way / side", "cue": "Full, slow circle; pelvis still"},
+      {"id": "p-3", "name": "90/90 switches", "dose": "× 8", "cue": "Back hip rotating in"},
+      {"id": "p-4", "name": "Knee-to-wall rocks", "dose": "× 10 / side", "cue": "Ankle opening, heel down"},
+      {"id": "p-5", "name": "Ankle circles", "dose": "5 each way / side", "cue": "Big, smooth"},
+      {"id": "p-6", "name": "Mini-band lateral walks", "dose": "2 × 10 steps each way", "cue": "Side of the glutes working"},
+      {"id": "p-7", "name": "Slow squat, knees over toes", "dose": "× 8", "cue": "Knees never cave in - goblet if a weight is handy"},
+      {"id": "p-8", "name": "Standing dry kick, one leg, hand on wall", "dose": "× 8 / side", "cue": "Heel back and out, foot hooked, snap"}
+    ],
+    "water": [
+      {"id": "w-1", "name": "Kick on your back, hands on hips (D4)", "dose": "4 × 25", "cue": "L1 heels up, shins hidden · L4 knees inside the hips"},
+      {"id": "w-2", "name": "Vertical kick, arms crossed (D8)", "dose": "2 × 20 s", "cue": "L3 turn the feet out late", "timer": [["kick", 20], ["rest", 20], ["kick", 20]]},
+      {"id": "w-3", "name": "Breaststroke kick, board or streamline", "dose": "4 × 25", "cue": "K2 push the water straight back"},
+      {"id": "w-4", "name": "Two kicks + one pull (D3)", "dose": "2 × 50", "cue": "K5 kick into a long body"}
+    ],
+    "check": "Before the main set: knees feel narrow, heels feel wide, nothing on the inside of the knee. If the inside of the knee talks, swap breaststroke kick for flutter or dolphin today and tell your physio."
+  },
+  "tests": [
+    {"id": "t1", "name": "Seated hip internal rotation", "unit": "°", "target": 45, "tol": 5,
+     "how": "Sit tall on a bench edge, knees together at 90°. Let one foot swing outward without the thigh lifting or the pelvis tilting. Phone level along the shin; read the angle from vertical.",
+     "ref": "45° or more, sides within 5°. Swimmers with no knee pain averaged 47°; occasional pain 42°; frequent pain 37°."},
+    {"id": "t2", "name": "Knee-to-wall", "unit": "cm", "target": 10, "tol": 2,
+     "how": "Lunge facing a wall, heel flat, knee touching the wall. Slide the foot back until the heel lifts; measure big toe to wall.",
+     "ref": "10 cm or more, sides within 2 cm."},
+    {"id": "t3", "name": "Prone foot turnout", "unit": "°", "target": null, "tol": 5,
+     "how": "Face down, knee bent 90°, thighs together, pelvis flat. Turn the foot outward by rotating the shin only. Phone on the sole.",
+     "ref": "Track baseline and symmetry (about 44° in young breaststrokers; the range most related to kick speed). Never force it."}
+  ],
+  "t4": {
+    "how": "Face down, mini band just above the knees, five slow kicks: heels up and out, feet hooked, snap together. Note where it stops and what you feel.",
+    "limiters": [
+      ["Front or outer hip tight; knees drift apart to get the heels out", "Hip internal rotation", "Block B"],
+      ["Heels get out, but the feet will not hook and turn out", "Ankle dorsiflexion + eversion", "Block D"],
+      ["Feet only turn out by twisting at the knee; sharp feeling inside the knee", "Lower-leg control - and a warning sign", "Block C gently; get it checked"],
+      ["Inner thigh pulls when the knees open", "Adductors - but the fix is not wider knees", "Block C strength; keep knees narrow"],
+      ["Clean: heels wide, knees narrow, no pain", "-", "Keep going"]
+    ]
+  },
+  "flags": [
+    ["Pain on the inside of the knee, in the kick or any exercise", "Stop forcing range, cut breaststroke kick volume, see your physio. Breaststroker's knee (medial collateral ligament / inner kneecap) was reported by 73% of breaststroke specialists in one survey."],
+    ["Groin pain in the Copenhagen plank", "Back to the short lever and shorter holds."],
+    ["Pain above 2/10, or a flare the next day", "Same rule as your force ladder: hold or go back one step."],
+    ["Shoulder complains under a goblet hold or in the Copenhagen", "Use the listed swap; keep loads at the sides or on the hips."],
+    ["Tempted to W-sit (sitting between your heels)", "Don't force it: it loads the inside of the knee. The rotation and ankle work gets you the turnout without that load."]
+  ]
+}
+</script>
+
+<div class="wrap">
+  <div class="head"><h1>Kick range</h1><span class="date mono" id="date"></span></div>
+  <div class="week" id="week"></div>
+  <div class="tabs" role="tablist">
+    <button role="tab" data-tab="gym">Gym</button>
+    <button role="tab" data-tab="pool">Pre-pool</button>
+    <button role="tab" data-tab="tests">Tests</button>
+  </div>
+  <p class="sync" id="sync">saving on this device</p>
+  <div class="exp" id="exp" hidden></div>
+  <input type="file" id="impf" accept="application/json,.json" hidden>
+  <main id="view"></main>
+</div>
+
+<script>
+(() => {
+  const R = JSON.parse(document.getElementById("routine").textContent);
+  const KEY = "kick-range-v2";
+  const view = document.getElementById("view");
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const today = () => new Date().toLocaleDateString("en-CA");
+  const blank = () => ({start: null, days: {}, loads: {}, tests: []});
+
+  let S = blank();
+  try { S = Object.assign(blank(), JSON.parse(localStorage.getItem(KEY)) || {}); } catch (e) {}
+  let tab = "gym";
+  try { tab = localStorage.getItem(KEY + ":tab") || "gym"; } catch (e) {}
+
+  /* ---------- persistence: localStorage now, db (private per user) when the viewer grants it ---------- */
+  let ref = null, localEdits = false, timer = null, chain = Promise.resolve();
+  const syncEl = document.getElementById("sync");
+  const setSync = t => { syncEl.textContent = t; };
+  const local = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+  function prune() {
+    const cut = new Date(Date.now() - 120 * 864e5).toLocaleDateString("en-CA");
+    for (const d of Object.keys(S.days)) if (d < cut) delete S.days[d];
+  }
+  function save() {
+    prune(); local();
+    if (!ref) { localEdits = true; return; }
+    setSync("saving…");
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      const body = JSON.parse(JSON.stringify(S));
+      chain = chain.then(() => ref.set(body)).then(() => setSync("synced across your devices"))
+        .catch(e => setSync(e && e.code === "invalid_argument" ? "saving on this device only" : "not synced yet - will retry on next change"));
+    }, 700);
+  }
+  function union(a, b) {             // remote a + this-device edits b
+    const out = Object.assign(blank(), JSON.parse(JSON.stringify(a)));
+    out.start = [a.start, b.start].filter(Boolean).sort()[0] || null;
+    for (const [d, m] of Object.entries(b.days || {})) out.days[d] = Object.assign({}, out.days[d], m);
+    Object.assign(out.loads, b.loads || {});
+    const seen = new Set(out.tests.map(t => JSON.stringify(t)));
+    for (const t of b.tests || []) if (!seen.has(JSON.stringify(t))) out.tests.push(t);
+    out.tests.sort((x, y) => x.date < y.date ? -1 : 1);
+    return out;
+  }
+  (async () => {
+    const use = window.claude && window.claude.use ? n => window.claude.use(n) : async () => null;
+    const [db, user] = await Promise.all([use("db"), use("user")]);
+    const id = user ? await user.id() : null;
+    if (!db || !id) { setSync("saving on this device"); return; }
+    const r = db.doc("data/users/" + id + "/kick");
+    try {
+      const snap = await r.get();
+      const remote = snap.exists ? Object.assign(blank(), snap.data()) : null;
+      const merged = remote ? (localEdits ? union(remote, S) : remote) : S;
+      const push = !remote || localEdits;
+      S = merged; local(); ref = r; render();
+      if (push && hasData()) await r.set(JSON.parse(JSON.stringify(S)));
+      setSync("synced across your devices");
+      r.onSnapshot(s => {
+        if (!s.exists || s.metadata.hasPendingWrites) return;
+        const d = Object.assign(blank(), s.data());
+        if (JSON.stringify(d) !== JSON.stringify(S)) { S = d; local(); render(); }
+      }, () => setSync("saving on this device"));
+    } catch (e) { setSync("saving on this device"); }
+  })();
+
+  /* ---------- export / import (standalone app: the weekly hand-off to Claude) ---------- */
+  const EXPK = KEY + ":exported";
+  let lastExp = null; try { lastExp = localStorage.getItem(EXPK); } catch (e) {}
+  const hasData = () => !!(S.start || S.tests.length || Object.keys(S.days).length || Object.keys(S.loads).length);
+  function renderExport() {
+    const el = document.getElementById("exp");
+    if (ref) { el.hidden = true; return; }          // synced inside claude.ai: no export needed
+    el.hidden = false;
+    const days = lastExp ? Math.round((new Date(today()) - new Date(lastExp)) / 864e5) : null;
+    const due = hasData() && (days === null || days >= 7 || (new Date().getDay() === 0 && days >= 1));
+    el.className = "exp" + (due ? " due" : "");
+    el.innerHTML = `<span>${days === null ? "Not exported yet" : "Exported " + (days === 0 ? "today" : days + "d ago")}${due ? " · export due" : ""}</span>
+      <span><button data-act="export">Export</button><button data-act="import">Import</button></span>`;
+  }
+  async function exportData() {
+    const name = "kick-" + today() + ".json";
+    const body = JSON.stringify({app: "kick-range", version: R.version, exported: new Date().toISOString(), state: S}, null, 1);
+    const file = new File([body], name, {type: "application/json"});
+    let ok = false;
+    try { if (navigator.canShare && navigator.canShare({files: [file]})) { await navigator.share({files: [file], title: name}); ok = true; } }
+    catch (e) { if (e && e.name === "AbortError") return; }
+    if (!ok) { try { const a = document.createElement("a"); a.href = URL.createObjectURL(file); a.download = name;
+      document.body.appendChild(a); a.click(); a.remove(); ok = true; } catch (e) {} }
+    if (ok) { lastExp = today(); try { localStorage.setItem(EXPK, lastExp); } catch (e) {} renderExport(); }
+  }
+
+  /* ---------- week / phase ---------- */
+  const weekNo = () => S.start ? Math.floor((new Date(today()) - new Date(S.start)) / 6048e5) + 1 : null;
+  const phase = n => R.phases.find(p => n >= p.weeks[0] && n <= p.weeks[1]);
+  let armReset = false;
+  function renderWeek() {
+    const el = document.getElementById("week");
+    document.getElementById("date").textContent = new Date().toLocaleDateString(undefined, {weekday: "short", day: "numeric", month: "short"});
+    const n = weekNo();
+    if (!n) {
+      el.innerHTML = `<div class="k">Not started</div><div class="r">Start the six-week block today: week 1 is learning the movements at light loads.</div>
+        <button class="startbtn" data-act="start">Start week 1 today</button>`;
+      return;
+    }
+    const p = phase(n);
+    el.innerHTML = `<div class="row"><div class="k">Week ${n} · ${esc(p.label.split(" · ")[1] || p.label)}</div>
+      <button class="lnk ${armReset ? "arm" : ""}" data-act="reset">${armReset ? "tap again to restart" : "restart"}</button></div>
+      <div class="r">${esc(p.rule)}</div>`;
+  }
+
+  /* ---------- exercise rows ---------- */
+  const doneMap = () => S.days[today()] || {};
+  function row(x, opts = {}) {
+    const done = !!doneMap()[x.id];
+    const t = x.timer ? `<button class="tm" data-tm="${x.id}">${x.timer.map(s => s[1] + "s").join(" · ")}</button>` : "";
+    const ld = x.load ? `<input class="load" data-ld="${x.id}" placeholder="kg / band" inputmode="text" aria-label="Load for ${esc(x.name)}" value="${esc(S.loads[x.id] || "")}">` : "";
+    const chips = opts.pool ? "" : `<div class="meta"><span class="chip">${esc(x.style)}</span>${x.load ? '<span class="chip ld">loaded</span>' : ""}</div>`;
+    const how = x.how ? `<details><summary>how</summary><p>${esc(x.how)}</p>${x.alt ? `<p class="alt">${esc(x.alt)}</p>` : ""}</details>` : "";
+    const cue = x.cue ? `<div class="cue">${esc(x.cue)}</div>` : "";
+    return `<div class="ex ${done ? "done" : ""}" data-ex="${x.id}">
+      <button class="tick" aria-pressed="${done}" aria-label="Done: ${esc(x.name)}">${done ? "&#10003;" : ""}</button>
+      <div><div class="top"><span class="nm">${esc(x.name)}</span><span class="dose">${esc(x.dose)}</span></div>
+      ${chips}${cue}${how}${(ld || t) ? `<div class="ctl">${ld}${t}</div>` : ""}</div></div>`;
+  }
+  const sectionHead = (title, extra, ids) => `<h2><span>${esc(title)}${extra ? " · " + esc(extra) : ""}</span><span class="c" data-count="${ids.join(",")}"></span></h2>`;
+
+  function renderGym() {
+    const all = R.gym.flatMap(b => b.items.map(i => i.id));
+    view.innerHTML = `<p class="note">${esc(R.frequency)}</p><div class="bar"><i data-bar="${all.join(",")}"></i></div>` +
+      R.gym.map(b => sectionHead(b.id + " · " + b.title, b.minutes, b.items.map(i => i.id)) + b.items.map(x => row(x)).join("")).join("") +
+      `<details class="flags"><summary>Stop and get it checked</summary><ul>${R.flags.map(f => `<li><b>${esc(f[0])}.</b> ${esc(f[1])}</li>`).join("")}</ul></details>`;
+  }
+  function renderPool() {
+    const P = R.prepool, all = [...P.deck, ...P.water].map(i => i.id);
+    view.innerHTML = `<p class="note">${esc(P.note)}</p><div class="bar"><i data-bar="${all.join(",")}"></i></div>` +
+      sectionHead("On deck", "8 min", P.deck.map(i => i.id)) + P.deck.map(x => row(x, {pool: 1})).join("") +
+      sectionHead("In the water", "~400 m", P.water.map(i => i.id)) + P.water.map(x => row(x, {pool: 1})).join("") +
+      `<details class="flags" open><summary>Check before the main set</summary><ul><li>${esc(P.check)}</li></ul></details>`;
+  }
+
+  /* ---------- tests ---------- */
+  let armRm = -1, testMsg = "";
+  const num = v => v === "" || v == null ? null : Number(v);
+  function verdict(t, lr) {
+    const [l, r] = lr || [];
+    if (l == null && r == null) return "";
+    const asym = l != null && r != null && Math.abs(l - r) > t.tol;
+    const low = t.target != null && ((l != null && l < t.target) || (r != null && r < t.target));
+    return asym || low ? "fail" : "pass";
+  }
+  function renderTests() {
+    const rows = R.tests.map(t => `<div class="trow"><div><div class="tn">${esc(t.name)}</div>
+        <div class="tt">${t.target != null ? "target " + t.target + esc(t.unit) + " · " : ""}sides within ${t.tol}${esc(t.unit)}</div></div>
+        <input type="number" inputmode="decimal" step="0.5" data-t="${t.id}" data-s="0" aria-label="${esc(t.name)} left" placeholder="L">
+        <input type="number" inputmode="decimal" step="0.5" data-t="${t.id}" data-s="1" aria-label="${esc(t.name)} right" placeholder="R"></div>`).join("");
+    const hist = [...S.tests].map((e, i) => [e, i]).reverse();
+    const cell = (t, e) => { const v = e[t.id]; if (!v || (v[0] == null && v[1] == null)) return "<td>-</td>";
+      return `<td class="${verdict(t, v)}">${v[0] ?? "-"} / ${v[1] ?? "-"}</td>`; };
+    view.innerHTML = `<div class="tform"><div class="trow"><div class="tt">day 1, then every two weeks</div><div class="lr">LEFT</div><div class="lr">RIGHT</div></div>${rows}
+        <div class="t4"><label class="tt" for="t4">T4 dry kick check: where it stops</label>
+        <select id="t4">${R.t4.limiters.map(l => `<option>${esc(l[0])}</option>`).join("")}</select>
+        <input class="n4" id="t4n" placeholder="note (optional)" maxlength="140"></div>
+        <button class="save" data-act="savetest">Save today's test</button><div class="msg">${esc(testMsg)}</div></div>
+      <h2><span>History</span><span class="c">${S.tests.length}</span></h2>
+      ${hist.length ? `<table class="hist"><thead><tr><th>Date</th><th>T1 hip IR</th><th>T2 knee-wall</th><th>T3 turnout</th><th></th></tr></thead><tbody>
+        ${hist.map(([e, i]) => `<tr><td>${esc(e.date.slice(5))}</td>${R.tests.map(t => cell(t, e)).join("")}
+          <td><button class="rm ${armRm === i ? "arm" : ""}" data-rm="${i}">${armRm === i ? "sure?" : "remove"}</button></td></tr>
+          ${e.t4 ? `<tr><td></td><td colspan="4" style="font-family:var(--sans);color:var(--dim);font-size:12px">${esc(e.t4)}</td></tr>` : ""}`).join("")}
+      </tbody></table>` : `<div class="empty">No tests yet. Do them warm, both sides, before you start week 1.</div>`}
+      <h2><span>How to test</span></h2>
+      ${R.tests.map(t => `<details><summary>${esc(t.id.toUpperCase())} ${esc(t.name)}</summary><p>${esc(t.how)}</p><p class="alt">${esc(t.ref)}</p></details>`).join("")}
+      <details><summary>T4 dry kick check · find your limiter</summary><p>${esc(R.t4.how)}</p>
+        <table class="lim">${R.t4.limiters.map(l => `<tr><td>${esc(l[0])}</td><td>${esc(l[2])}</td></tr>`).join("")}</table></details>`;
+  }
+
+  /* ---------- render ---------- */
+  function counts() {
+    const m = doneMap();
+    view.querySelectorAll("[data-count]").forEach(el => {
+      const ids = el.dataset.count.split(","), n = ids.filter(i => m[i]).length;
+      el.textContent = n + "/" + ids.length; el.classList.toggle("all", n === ids.length);
+    });
+    view.querySelectorAll("[data-bar]").forEach(el => {
+      const ids = el.dataset.bar.split(","); el.style.width = (100 * ids.filter(i => m[i]).length / ids.length) + "%";
+    });
+  }
+  function render() {
+    renderWeek(); renderExport();
+    document.querySelectorAll(".tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === tab));
+    ({gym: renderGym, pool: renderPool, tests: renderTests})[tab]();
+    counts();
+  }
+
+  /* ---------- timer ---------- */
+  let run = null, actx = null;
+  function beep(f = 880, d = 0.14) {
+    try { actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      const o = actx.createOscillator(), g = actx.createGain(); o.frequency.value = f; g.gain.value = 0.12;
+      o.connect(g); g.connect(actx.destination); o.start(); o.stop(actx.currentTime + d); } catch (e) {}
+  }
+  const allItems = () => [...R.gym.flatMap(b => b.items), ...R.prepool.deck, ...R.prepool.water];
+  function startTimer(btn, id) {
+    if (run) { clearInterval(run.iv); const same = run.id === id; run.btn.classList.remove("run"); run.btn.textContent = run.label; run = null; if (same) return; }
+    const x = allItems().find(i => i.id === id), steps = x.timer;
+    let k = 0, end = Date.now() + steps[0][1] * 1000;
+    run = {id, btn, label: btn.textContent, iv: 0}; btn.classList.add("run"); beep(660);
+    const tickT = () => {
+      let left = Math.ceil((end - Date.now()) / 1000);
+      if (left <= 0) {
+        k++;
+        if (k >= steps.length) { clearInterval(run.iv); btn.classList.remove("run"); btn.textContent = "done ✓"; beep(990, .3);
+          try { navigator.vibrate && navigator.vibrate([200, 80, 200]); } catch (e) {}
+          const lbl = run.label; run = null; setTimeout(() => { if (!run || run.btn !== btn) btn.textContent = lbl; }, 2500); return; }
+        end = Date.now() + steps[k][1] * 1000; left = steps[k][1]; beep(880);
+      }
+      btn.textContent = steps[k][0] + " " + Math.floor(left / 60) + ":" + String(left % 60).padStart(2, "0");
+    };
+    tickT(); run.iv = setInterval(tickT, 250);
+  }
+
+  /* ---------- events ---------- */
+  document.addEventListener("click", e => {
+    const t = e.target.closest("button"); if (!t) return;
+    if (t.dataset.tab) { tab = t.dataset.tab; try { localStorage.setItem(KEY + ":tab", tab); } catch (_) {} armRm = -1; testMsg = ""; render(); return; }
+    if (t.classList.contains("tick")) {
+      const ex = t.closest(".ex"), id = ex.dataset.ex, d = today();
+      S.days[d] = S.days[d] || {};
+      if (S.days[d][id]) delete S.days[d][id]; else S.days[d][id] = 1;
+      const on = !!S.days[d][id];
+      ex.classList.toggle("done", on); t.setAttribute("aria-pressed", on); t.innerHTML = on ? "&#10003;" : "";
+      counts(); save(); return;
+    }
+    if (t.dataset.tm) { startTimer(t, t.dataset.tm); return; }
+    const act = t.dataset.act;
+    if (act === "export") { exportData(); return; }
+    if (act === "import") { document.getElementById("impf").click(); return; }
+    if (act === "start") { S.start = today(); save(); render(); return; }
+    if (act === "reset") { if (armReset) { S.start = today(); armReset = false; save(); } else { armReset = true; setTimeout(() => { armReset = false; renderWeek(); }, 4000); } renderWeek(); return; }
+    if (act === "savetest") {
+      const e2 = {date: today()};
+      let any = false;
+      for (const tt of R.tests) {
+        const v = [0, 1].map(s => num(view.querySelector(`input[data-t="${tt.id}"][data-s="${s}"]`).value));
+        if (v.some(x => x != null && !isNaN(x))) { e2[tt.id] = v.map(x => isNaN(x) ? null : x); any = true; }
+      }
+      const lim = document.getElementById("t4").value, note = document.getElementById("t4n").value.trim();
+      e2.t4 = note ? lim + " - " + note : lim;
+      if (!any) { testMsg = "Enter at least one measurement."; renderTests(); return; }
+      S.tests.push(e2); testMsg = "Saved."; save(); renderTests(); return;
+    }
+    if (t.dataset.rm != null) {
+      const i = Number(t.dataset.rm);
+      if (armRm === i) { S.tests.splice(i, 1); armRm = -1; save(); } else armRm = i;
+      testMsg = ""; renderTests(); return;
+    }
+  });
+  document.addEventListener("change", e => {
+    const el = e.target;
+    if (el.id === "impf" && el.files && el.files[0]) {
+      el.files[0].text().then(t => { const d = JSON.parse(t); if (!d || !d.state) throw 0;
+        S = union(Object.assign(blank(), d.state), S); save(); render(); setSync("imported " + el.files[0].name); })
+        .catch(() => setSync("that file is not a Kick Range export")).finally(() => { el.value = ""; });
+      return;
+    }
+    if (el.dataset && el.dataset.ld) { const v = el.value.trim(); if (v) S.loads[el.dataset.ld] = v; else delete S.loads[el.dataset.ld]; save(); }
+  });
+
+  render();
+})();
+</script>
+
+<script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("sw.js"));</script>
+</body>
+</html>
