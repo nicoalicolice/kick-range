@@ -114,9 +114,9 @@ details p.alt{color:var(--dim);font-size:12.5px}
 
 <script type="application/json" id="routine">
 {
-  "version": "2",
-  "updated": "2026-10-07",
-  "frequency": "Gym routine 3 times a week on non-consecutive days, about 40 minutes, after swimming or on its own - not right before a race-pace or time-trial session. Start every lift lighter than you think: after any break, tendons need a few weeks to catch up with muscle.",
+  "version": "3",
+  "updated": "2026-10-13",
+  "frequency": "Gym routine 3 times a week on non-consecutive days, about 60 minutes (or split it over two days: A, B, C, G one day and A, D, E, F, G the next), after swimming or on its own - not right before a race-pace or time-trial session. Start every lift lighter than you think: after any break, tendons need a few weeks to catch up with muscle.",
   "phases": [
     {"weeks": [1, 2], "label": "Weeks 1-2 · learn", "rule": "Loads you could lift 3-4 more reps (RPE 6). Copenhagen on the short lever. Contract-relax 2 rounds."},
     {"weeks": [3, 4], "label": "Weeks 3-4 · build", "rule": "Add load when every rep is smooth through the full range (RPE 7-8). Contract-relax 3 rounds. Copenhagen 25-30 s."},
@@ -150,7 +150,7 @@ details p.alt{color:var(--dim);font-size:12.5px}
        "how": "Stand on one leg with a hand on a rack and hinge until the torso is near horizontal. Rotate the pelvis open, then close it back over the standing hip - that closing is hip internal rotation under bodyweight. Slow.",
        "alt": "Once easy, hold a 2-5 kg dumbbell in the free hand."}
     ]},
-    {"id": "C", "title": "Adductors, glutes & knee", "minutes": "12 min", "items": [
+    {"id": "C", "title": "Adductors & glutes", "minutes": "12 min", "items": [
       {"id": "g-c1", "name": "Copenhagen plank", "dose": "3 × 20-30 s / side", "style": "Isometric strength", "load": false,
        "how": "Side plank with the top leg on a bench - knee on the bench for the short lever, ankle for the long lever - and the bottom leg free. Hips high, body straight. The adductors drive the snap of the feet together.",
        "alt": "If the forearm position is uncomfortable: adductor machine plus a ball squeeze instead.",
@@ -176,7 +176,47 @@ details p.alt{color:var(--dim);font-size:12.5px}
       {"id": "g-d3", "name": "Eversion, band or cable", "dose": "3 × 12 / side", "style": "Strength in range", "load": true,
        "how": "Seated, band or ankle strap around the forefoot anchored on the inside. Turn the sole outward and up; take 3 s to come back."}
     ]},
-    {"id": "E", "title": "Power & pattern", "minutes": "5 min", "items": [
+    {"id": "E", "title": "Hip extension", "minutes": "8 min",
+     "note": "The front of the hip has to open for the end of the kick, the streamline and a flat dive entry. Skilled breaststrokers show more active hip extension, and tightness here tips the pelvis and drops the legs. Extend from the hip, not the lower back: pelvis tucked, glute squeezed.",
+     "items": [
+      {"id": "g-h1", "name": "Half-kneeling hip opener", "dose": "2 × 40 s / side", "style": "Active stretch", "load": false,
+       "how": "Back knee on a pad, front foot forward, hands on hips. Tuck the tailbone under and squeeze the glute of the back leg, then shift forward until the front of that hip opens. Ribs down; no arch in the lower back.",
+       "timer": [["side 1", 40], ["side 2", 40]]},
+      {"id": "g-h2", "name": "Couch stretch contract-relax", "dose": "2 rounds / side", "style": "End-range isometrics", "load": false,
+       "how": "Back knee on a pad against a bench, that foot up on the bench, front foot flat ahead, torso upright. Relax into it for 45 s; press the back shin into the bench at about 50% for 10 s; then squeeze the back glute hard for 10 s and sink a little deeper.",
+       "alt": "Too intense: keep the back foot on the floor (half-kneeling) and use the same press and squeeze.",
+       "timer": [["relax", 45], ["press 50%", 10], ["glute", 10]]},
+      {"id": "g-h3", "name": "Long-stance split squat, back hip open", "dose": "3 × 8 / side", "style": "Loaded mobility", "load": true,
+       "how": "Dumbbells at your sides, long stance. Lower slowly; at the bottom tuck the pelvis and squeeze the back glute so the front of the back hip opens, hold 2 s. Front knee tracks over the second toe."},
+      {"id": "g-h4", "name": "Reverse hyper on a bench", "dose": "3 × 12", "style": "Strength", "load": true,
+       "how": "Face down with the hips at the end of a bench and the legs hanging. Squeeze the glutes to lift straight legs up to the line of the body, hold 2 s, lower slowly. Stop at the body line: going higher only arches the lower back. Load with ankle weights.",
+       "alt": "No bench: lie face down on the floor and lift one straight leg at a time, 3 × 10 / side."},
+      {"id": "g-h5", "name": "Prone hip lift-offs, knee bent", "dose": "2 × 5 / side, 3 s holds", "style": "Active end-range", "load": true,
+       "how": "Face down, one knee bent 90°, pelvis pinned to the floor. Lift that thigh 3-5 cm using only the glute, without the hip rolling or the back arching. This is owning the new range. Add a light ankle weight once it is easy."}
+    ]},
+    {"id": "F", "title": "Knee strength & mobility", "minutes": "10 min",
+     "note": "The whip kick bends the knee about 130° and loads its inside as the lower leg turns out. Strong quads and hamstrings, controlled shin rotation and knees that track straight under load are what let it take thousands of kicks a week. Pain-free range only: effort in the thigh, never pain at the kneecap or the inside of the knee.",
+     "items": [
+      {"id": "g-k1", "name": "Kneeling rock-backs", "dose": "2 × 10", "style": "Dynamic", "load": false,
+       "how": "Kneel on a pad with the feet straight behind you (not turned out), hands on the floor. Rock the hips back toward the heels as far as is comfortable, then forward. Builds the deep knee bend the kick recovery needs.",
+       "alt": "Tight: a rolled towel behind the knees, or hands on a bench to take some weight."},
+      {"id": "g-k2", "name": "Banded tibial rotation", "dose": "2 × 12 each way / side", "style": "Strength in range", "load": true,
+       "how": "Sit with the knee bent 90° and the heel planted, band looped around the forefoot. Turn the front of the foot outward against the band by rotating the shin; switch the anchor side to train the inward turn. The knee itself stays still.",
+       "alt": "No band: the same movement unloaded, slow and smooth."},
+      {"id": "g-k3", "name": "Spanish squat hold", "dose": "4 × 30-45 s", "style": "Isometric strength", "load": true,
+       "how": "Heavy band behind both knees, anchored to a rack in front. Sit back to about 90° at the knee with the shins vertical and the chest up, and hold. Loads the quads and kneecap tendon hard with no inward collapse.",
+       "alt": "No band: wall sit at the same depth.",
+       "timer": [["hold", 40], ["rest", 30], ["hold", 40]]},
+      {"id": "g-k4", "name": "Reverse Nordic", "dose": "2 × 6", "style": "Eccentric strength", "load": true,
+       "how": "Kneel upright on a pad, body straight from knees to head. Lean back slowly as far as you control, then return by squeezing the thighs. Lengthens and strengthens the front of the thigh, which also helps the hip extension block.",
+       "alt": "Hold a band anchored in front for help, or shorten the range. Load field: band help, BW, or a plate held at the chest."},
+      {"id": "g-k5", "name": "Lateral step-down", "dose": "3 × 8 / side", "style": "Strength + knee control", "load": true,
+       "how": "Stand side-on on a 15-20 cm step and lower the free heel to tap the floor over 3 s. The standing knee tracks over the second toe and never drifts inward. Hold dumbbells once every rep is clean."},
+      {"id": "g-k6", "name": "Slider or ball hamstring curl", "dose": "3 × 8", "style": "Strength", "load": true,
+       "how": "On your back with the heels on sliders or a ball, hips lifted into a bridge. Curl the heels in toward the glutes and slide back out slowly, hips staying up. Hamstrings drive the heel speed of the kick recovery and steady the knee.",
+       "alt": "Progress to one leg. Load field: two legs / one leg."}
+    ]},
+    {"id": "G", "title": "Power & pattern", "minutes": "5 min", "items": [
       {"id": "g-e1", "name": "Countermovement jumps", "dose": "3 × 5", "style": "Power", "load": false,
        "how": "Dip and jump as high as you can, land soft, full reset between reps. Jump height tracks propulsive speed in elite breaststrokers."},
       {"id": "g-e2", "name": "Prone dry kick, band above knees", "dose": "2 × 10", "style": "Motor pattern", "load": false,
@@ -184,7 +224,7 @@ details p.alt{color:var(--dim);font-size:12.5px}
     ]}
   ],
   "prepool": {
-    "note": "8 minutes dry, then the first ~400 m of the warm-up. Keep it moving: no static hold longer than about 20 s before training.",
+    "note": "9 minutes dry, then the first ~400 m of the warm-up. Keep it moving: no static hold longer than about 20 s before training.",
     "deck": [
       {"id": "p-1", "name": "Easy skips or jacks", "dose": "1 min", "cue": "Warm, breathing up", "timer": [["move", 60]]},
       {"id": "p-2", "name": "Standing hip circles (CARs), hand on a wall", "dose": "3 each way / side", "cue": "Full, slow circle; pelvis still"},
@@ -193,6 +233,7 @@ details p.alt{color:var(--dim);font-size:12.5px}
       {"id": "p-5", "name": "Ankle circles", "dose": "5 each way / side", "cue": "Big, smooth"},
       {"id": "p-6", "name": "Mini-band lateral walks", "dose": "2 × 10 steps each way", "cue": "Side of the glutes working"},
       {"id": "p-7", "name": "Slow squat, knees over toes", "dose": "× 8", "cue": "Knees never cave in - goblet if a weight is handy"},
+      {"id": "p-9", "name": "Half-kneeling hip opener rocks", "dose": "× 8 / side", "cue": "Glute squeezed, front of the back hip opening, no low-back arch"},
       {"id": "p-8", "name": "Standing dry kick, one leg, hand on wall", "dose": "× 8 / side", "cue": "Heel back and out, foot hooked, snap"}
     ],
     "water": [
@@ -204,22 +245,25 @@ details p.alt{color:var(--dim);font-size:12.5px}
     "check": "Before the main set: knees feel narrow, heels feel wide, nothing on the inside of the knee. If the inside of the knee talks, swap breaststroke kick for flutter or dolphin today and get it checked."
   },
   "tests": [
-    {"id": "t1", "name": "Seated hip internal rotation", "unit": "°", "target": 45, "tol": 5,
+    {"id": "t1", "short": "T1 hip IR", "name": "Seated hip internal rotation", "unit": "°", "target": 45, "tol": 5,
      "how": "Sit tall on a bench edge, knees together at 90°. Let one foot swing outward without the thigh lifting or the pelvis tilting. Phone level along the shin; read the angle from vertical.",
      "ref": "45° or more, sides within 5°. Swimmers with no knee pain averaged 47°; occasional pain 42°; frequent pain 37°."},
-    {"id": "t2", "name": "Knee-to-wall", "unit": "cm", "target": 10, "tol": 2,
+    {"id": "t2", "short": "T2 knee-wall", "name": "Knee-to-wall", "unit": "cm", "target": 10, "tol": 2,
      "how": "Lunge facing a wall, heel flat, knee touching the wall. Slide the foot back until the heel lifts; measure big toe to wall.",
      "ref": "10 cm or more, sides within 2 cm."},
-    {"id": "t3", "name": "Prone foot turnout", "unit": "°", "target": null, "tol": 5,
+    {"id": "t3", "short": "T3 turnout", "name": "Prone foot turnout", "unit": "°", "target": null, "tol": 5,
      "how": "Face down, knee bent 90°, thighs together, pelvis flat. Turn the foot outward by rotating the shin only. Phone on the sole.",
-     "ref": "Track baseline and symmetry (about 44° in young breaststrokers; the range most related to kick speed). Never force it."}
+     "ref": "Track baseline and symmetry (about 44° in young breaststrokers; the range most related to kick speed). Never force it."},
+    {"id": "t5", "short": "T5 hip ext", "name": "Hip extension (modified Thomas test)", "unit": "°", "target": 0, "tol": 5,
+     "how": "Sit on the very end of a bench, hug one knee to the chest and roll onto your back; let the other leg hang off the end. Phone along the hanging thigh. Record degrees below horizontal as positive, above horizontal as negative. Lower back stays flat on the bench.",
+     "ref": "Thigh at or below horizontal (0° or more), sides within 5°. A thigh that stays up points at tight hip flexors; a lower leg that swings forward points at the front of the thigh (rectus femoris)."}
   ],
   "t4": {
     "how": "Face down, mini band just above the knees, five slow kicks: heels up and out, feet hooked, snap together. Note where it stops and what you feel.",
     "limiters": [
       ["Front or outer hip tight; knees drift apart to get the heels out", "Hip internal rotation", "Block B"],
       ["Heels get out, but the feet will not hook and turn out", "Ankle dorsiflexion + eversion", "Block D"],
-      ["Feet only turn out by twisting at the knee; sharp feeling inside the knee", "Lower-leg control - and a warning sign", "Block C gently; get it checked"],
+      ["Feet only turn out by twisting at the knee; sharp feeling inside the knee", "Lower-leg control - and a warning sign", "Block F gently; get it checked"],
       ["Inner thigh pulls when the knees open", "Adductors - but the fix is not wider knees", "Block C strength; keep knees narrow"],
       ["Clean: heels wide, knees narrow, no pain", "-", "Keep going"]
     ]
@@ -227,6 +271,8 @@ details p.alt{color:var(--dim);font-size:12.5px}
   "flags": [
     ["Pain on the inside of the knee, in the kick or any exercise", "Stop forcing range, cut breaststroke kick volume, see a physio. Breaststroker's knee (medial collateral ligament / inner kneecap) was reported by 73% of breaststroke specialists in one survey."],
     ["Groin pain in the Copenhagen plank", "Back to the short lever and shorter holds."],
+    ["Pain at the front of the knee in the Spanish squat or reverse Nordic", "Shorten the range or the hold: it should feel like effort in the thigh, not pain at the kneecap."],
+    ["Pinching in the lower back during hip extension work", "You are arching instead of opening the hip: tuck the pelvis, shorten the range, squeeze the glute."],
     ["Pain above 2/10, or a flare the next day", "Hold the load, or go back one step."],
     ["Tempted to W-sit (sitting between your heels)", "Don't force it: it loads the inside of the knee. The rotation and ankle work gets you the turnout without that load."]
   ]
@@ -377,13 +423,13 @@ details p.alt{color:var(--dim);font-size:12.5px}
   function renderGym() {
     const all = R.gym.flatMap(b => b.items.map(i => i.id));
     view.innerHTML = `<p class="note">${esc(R.frequency)}</p><div class="bar"><i data-bar="${all.join(",")}"></i></div>` +
-      R.gym.map(b => sectionHead(b.id + " · " + b.title, b.minutes, b.items.map(i => i.id)) + b.items.map(x => row(x)).join("")).join("") +
+      R.gym.map(b => sectionHead(b.id + " · " + b.title, b.minutes, b.items.map(i => i.id)) + (b.note ? `<p class="note">${esc(b.note)}</p>` : "") + b.items.map(x => row(x)).join("")).join("") +
       `<details class="flags"><summary>Stop and get it checked</summary><ul>${R.flags.map(f => `<li><b>${esc(f[0])}.</b> ${esc(f[1])}</li>`).join("")}</ul></details>`;
   }
   function renderPool() {
     const P = R.prepool, all = [...P.deck, ...P.water].map(i => i.id);
     view.innerHTML = `<p class="note">${esc(P.note)}</p><div class="bar"><i data-bar="${all.join(",")}"></i></div>` +
-      sectionHead("On deck", "8 min", P.deck.map(i => i.id)) + P.deck.map(x => row(x, {pool: 1})).join("") +
+      sectionHead("On deck", "9 min", P.deck.map(i => i.id)) + P.deck.map(x => row(x, {pool: 1})).join("") +
       sectionHead("In the water", "~400 m", P.water.map(i => i.id)) + P.water.map(x => row(x, {pool: 1})).join("") +
       `<details class="flags" open><summary>Check before the main set</summary><ul><li>${esc(P.check)}</li></ul></details>`;
   }
@@ -412,10 +458,10 @@ details p.alt{color:var(--dim);font-size:12.5px}
         <input class="n4" id="t4n" placeholder="note (optional)" maxlength="140"></div>
         <button class="save" data-act="savetest">Save today's test</button><div class="msg">${esc(testMsg)}</div></div>
       <h2><span>History</span><span class="c">${S.tests.length}</span></h2>
-      ${hist.length ? `<table class="hist"><thead><tr><th>Date</th><th>T1 hip IR</th><th>T2 knee-wall</th><th>T3 turnout</th><th></th></tr></thead><tbody>
+      ${hist.length ? `<table class="hist"><thead><tr><th>Date</th>${R.tests.map(t => `<th>${esc(t.short)}</th>`).join("")}<th></th></tr></thead><tbody>
         ${hist.map(([e, i]) => `<tr><td>${esc(e.date.slice(5))}</td>${R.tests.map(t => cell(t, e)).join("")}
           <td><button class="rm ${armRm === i ? "arm" : ""}" data-rm="${i}">${armRm === i ? "sure?" : "remove"}</button></td></tr>
-          ${e.t4 ? `<tr><td></td><td colspan="4" style="font-family:var(--sans);color:var(--dim);font-size:12px">${esc(e.t4)}</td></tr>` : ""}`).join("")}
+          ${e.t4 ? `<tr><td></td><td colspan="${R.tests.length + 1}" style="font-family:var(--sans);color:var(--dim);font-size:12px">${esc(e.t4)}</td></tr>` : ""}`).join("")}
       </tbody></table>` : `<div class="empty">No tests yet. Do them warm, both sides, before you start week 1.</div>`}
       <h2><span>How to test</span></h2>
       ${R.tests.map(t => `<details><summary>${esc(t.id.toUpperCase())} ${esc(t.name)}</summary><p>${esc(t.how)}</p><p class="alt">${esc(t.ref)}</p></details>`).join("")}
